@@ -38,6 +38,10 @@ async def on_message(message):
     dead = discord.utils.get(message.guild.roles, id = 714535509279637525)
     rof_armour = discord.utils.get(message.guild.roles, id = 747465352841134190)
 
+    #linking status
+    standowner = discord.utils.get(message.guild.members, id = my_id)
+    await client.change_presence(status=standowner.status)
+    
     if message.channel.category.id == 736788095667666985:
         return
     if message.author.bot:
