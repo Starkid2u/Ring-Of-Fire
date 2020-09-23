@@ -24,13 +24,6 @@ futureburn = 0
 message_counter = 0
 @client.event
 async def on_message(message):
-    # linking status
-    standowner = discord.utils.get(message.guild.members, id = my_id)
-    try:
-        if standowner.activity.name == "Spotify":
-            await client.change_presence(status=standowner.status, activity=discord.Activity(name=standowner.activity.name, type=discord.ActivityType.listening))
-    except AttributeError:
-        await client.change_presence(status=standowner.status, activity=standowner.activity)
 
     maxhealth = discord.utils.get(message.guild.roles, id = 714534974916919349)
     health9 = discord.utils.get(message.guild.roles, id = 714535185273847871)
@@ -202,7 +195,11 @@ async def on_member_update(before, after):
         try:
             if after.activity.name == "Spotify":
                 await client.change_presence(status=after.status, activity=discord.Activity(name=after.activity.name, type=discord.ActivityType.listening))
-        except AttributeError:
+            elif after.activity.type == discord.ActivityType.streaming:
+                await client.change_presence(status=after.status, activity=discord.Activity(name=after.activity.name, url=after.activity.url, type=discord.ActivityType.streaming))
+            else:
+                await client.change_presence(status=after.status, activity=after.activity)
+        except AttributeError or IndexError:
             await client.change_presence(status=after.status, activity=after.activity)
 
 client.run(token)
